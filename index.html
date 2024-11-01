@@ -6,26 +6,44 @@
     <title>Klinr Pro - Premium Eco-Friendly Home Cleaning</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hide-form {
+            display: none;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <!-- Hero Section -->
     <div class="relative bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto">
-            <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-                <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+            <div class="relative z-10 bg-white lg:max-w-2xl lg:w-full">
+                <div class="relative pt-6 px-4 sm:px-6 lg:px-8">
+                    <!-- Navigation can go here if needed -->
+                </div>
+
+                <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
                     <div class="sm:text-center lg:text-left">
                         <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                            <span class="block">Professional & Eco-Friendly</span>
-                            <span class="block text-green-600">Home Cleaning Service</span>
+                            <span class="block xl:inline">Professional & Eco-Friendly</span>
+                            <span class="block text-green-600 xl:inline">Home Cleaning Service</span>
                         </h1>
                         <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                             Premium cleaning services using certified eco-friendly products. Experience a cleaner, healthier home while protecting the environment.
                         </p>
                         <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                             <div class="rounded-md shadow">
-                                <a href="#booking" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 md:py-4 md:text-lg md:px-10">
+                                <button id="bookNowBtn" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 md:py-4 md:text-lg md:px-10">
                                     Book Now
-                                </a>
+                                </button>
                             </div>
                             <div class="mt-3 sm:mt-0 sm:ml-3">
                                 <a href="#services" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 md:py-4 md:text-lg md:px-10">
@@ -152,7 +170,7 @@
     </div>
 
     <!-- Booking Form Section -->
-    <div id="booking" class="py-12 bg-white">
+    <div id="booking" class="py-12 bg-white hide-form">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:text-center mb-12">
                 <h2 class="text-base text-green-600 font-semibold tracking-wide uppercase">Book Now</h2>
@@ -396,7 +414,17 @@
     </footer>
 
     <!-- Form Handling Script -->
+    <!-- Updated Script Section -->
     <script>
+        // Form visibility toggle
+        document.getElementById('bookNowBtn').addEventListener('click', function() {
+            const bookingSection = document.getElementById('booking');
+            bookingSection.classList.remove('hide-form');
+            bookingSection.classList.add('fade-in');
+            bookingSection.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Form submission handling
         document.getElementById('bookingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
