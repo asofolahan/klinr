@@ -7,6 +7,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        .hero-image {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/api/placeholder/1920/1080');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
         .hide-form {
             display: none;
         }
@@ -16,47 +23,117 @@
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Hero Section -->
-    <div class="relative bg-white overflow-hidden">
-        <div class="max-w-7xl mx-auto">
-            <div class="relative z-10 bg-white lg:max-w-2xl lg:w-full">
-                <div class="relative pt-6 px-4 sm:px-6 lg:px-8">
-                    <!-- Navigation can go here if needed -->
-                </div>
-
-                <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-                    <div class="sm:text-center lg:text-left">
-                        <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                            <span class="block xl:inline">Professional & Eco-Friendly</span>
-                            <span class="block text-green-600 xl:inline">Home Cleaning Service</span>
-                        </h1>
-                        <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                            Premium cleaning services using certified eco-friendly products. Experience a cleaner, healthier home while protecting the environment.
-                        </p>
-                        <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                            <div class="rounded-md shadow">
-                                <button id="bookNowBtn" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 md:py-4 md:text-lg md:px-10">
-                                    Book Now
-                                </button>
-                            </div>
-                            <div class="mt-3 sm:mt-0 sm:ml-3">
-                                <a href="#services" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 md:py-4 md:text-lg md:px-10">
-                                    View Services
-                                </a>
-                            </div>
+    <!-- New Hero Section -->
+    <div class="relative hero-image">
+        <div class="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent"></div>
+        
+        <div class="relative max-w-7xl mx-auto">
+            <div class="pt-16 pb-20 px-4 sm:px-6 lg:pt-24 lg:pb-28 lg:px-8">
+                <div class="max-w-xl">
+                    <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl lg:text-6xl">
+                        <span class="block mb-2">Professional &</span>
+                        <span class="block text-green-600">Eco-Friendly</span>
+                        <span class="block">Home Cleaning</span>
+                    </h1>
+                    
+                    <p class="mt-6 text-lg text-gray-600 max-w-lg">
+                        Experience premium cleaning services using certified eco-friendly products. 
+                        Your path to a cleaner home and a healthier planet starts here.
+                    </p>
+                    
+                    <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                        <button id="bookNowBtn" 
+                                class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            Book Your Cleaning
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        
+                        <a href="#services" 
+                           class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-lg text-green-700 bg-green-50 hover:bg-green-100 hover:shadow transform hover:-translate-y-0.5 transition-all duration-150">
+                            View Services
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <div class="mt-8 flex items-center gap-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-leaf text-green-600 mr-2"></i>
+                            <span class="text-sm text-gray-600">Eco-Friendly</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-shield-alt text-green-600 mr-2"></i>
+                            <span class="text-sm text-gray-600">Professional</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-heart text-green-600 mr-2"></i>
+                            <span class="text-sm text-gray-600">Satisfaction Guaranteed</span>
                         </div>
                     </div>
-                </main>
+                </div>
+                
+                <div class="absolute right-0 top-0 w-1/2 h-full hidden lg:block">
+                    <img src="800-600.png" alt="Clean home" class="object-cover w-full h-full rounded-bl-3xl shadow-2xl">
+                </div>
             </div>
         </div>
-        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-            <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="800-600.png" alt="Clean home">
+    </div>
+
+    <!-- Initial Features/Stats Section -->
+    <div class="bg-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="bg-green-50 rounded-lg p-6">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-green-600 text-white">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900">4.9/5</h3>
+                            <p class="text-base text-gray-500">Customer Rating</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-green-50 rounded-lg p-6">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-green-600 text-white">
+                                <i class="fas fa-home"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900">1000+</h3>
+                            <p class="text-base text-gray-500">Homes Cleaned</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-green-50 rounded-lg p-6">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-green-600 text-white">
+                                <i class="fas fa-recycle"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900">100%</h3>
+                            <p class="text-base text-gray-500">Eco-Friendly Products</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
