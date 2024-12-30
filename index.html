@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Numr - Real Estate Intelligence Platform</title>
@@ -130,12 +125,12 @@
                     mode: 'no-cors'
                 });
 
-                document.getElementById('waitlistForm').classList.add('hidden');
-                document.getElementById('successMessage').classList.remove('hidden');
+                document.getElementById('waitlistForm').style.display = 'none';
+    document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
                 this.reset();
             } catch (error) {
-                document.getElementById('errorMessage').classList.remove('hidden');
+                document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('errorMessage').scrollIntoView({ behavior: 'smooth' });
                 console.error('Error:', error);
             }
