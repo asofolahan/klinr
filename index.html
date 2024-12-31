@@ -85,8 +85,36 @@
         };
 
         // Bucket
-        const variant = Math.random() < 0.33 ? 'data' : Math.random() < 0.66 ? 'investment' : 'remote';
+        function getVariant() {
+            // Get the current path from URL
+            const path = window.location.pathname.toLowerCase();
+            
+            // Check for specific paths
+            if (path.includes('/data')) {
+                return 'data';
+            } else if (path.includes('/invest')) {
+                return 'investment';
+            } else if (path.includes('/remote')) {
+                return 'remote';
+            }
+            
+            // If no specific path, randomize
+            return Math.random() < 0.33 ? 'data' : Math.random() < 0.66 ? 'investment' : 'remote';
+        }
+
+        // Update variant selection
+        const variant = getVariant();
         window.currentVariant = variants[variant];
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4TX4QD73YT"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-4TX4QD73YT');
     </script>
 </head>
 <body class="bg-gray-50">
@@ -94,7 +122,7 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between h-16">
                 <div class="flex-shrink-0 flex items-center">
-                    <img src="numr-logo.png" alt="Numr logo" class="h-12 w-12 rounded">
+                    <img src="src/img/numr-logo.png" alt="Numr logo" class="h-12 w-12 rounded">
                     <span class="text-3xl font-bold text-indigo-600">Numr</span>
                 </div>
             </div>
@@ -107,7 +135,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="relative shadow-xl sm:rounded-2xl sm:overflow-hidden">
                     <div class="absolute inset-0">
-                        <img class="h-full w-full object-cover" src="eko.gif" alt="Real estate">
+                        <img class="h-full w-full object-cover" src="src/img/eko.gif" alt="Real estate">
                         <div id="gradient" class="absolute inset-0 bg-gradient-to-r mix-blend-multiply"></div>
                     </div>
                     <div class="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8">
@@ -196,10 +224,22 @@
                     }
                 });
 
+                // Track successful submission
+                gtag('event', 'generate_lead', {
+                    'event_category': 'engagement',
+                    'event_label': currentVariant.source
+                });
+
                 document.getElementById('waitlistForm').style.display = 'none';
                 document.getElementById('successMessage').style.display = 'block';
             } catch (error) {
                 console.error('Error:', error);
+
+                // Track errors
+                gtag('event', 'form_error', {
+                    'event_category': 'error',
+                    'event_label': error.message
+                });
                 document.getElementById('errorMessage').style.display = 'block';
             }
         });
