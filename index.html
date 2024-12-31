@@ -86,15 +86,28 @@
 
         // Bucket
         function getVariant() {
-            // Get the current path from URL
-            const path = window.location.pathname.toLowerCase();
+            // Check for redirected path first
+            const redirectPath = sessionStorage.getItem('redirectPath');
+            if (redirectPath) {
+                // Clear it immediately to prevent future interference
+                sessionStorage.removeItem('redirectPath');
+                
+                if (redirectPath.includes('/data')) {
+                    return 'data';
+                } else if (redirectPath.includes('/invest')) {
+                    return 'investment';
+                } else if (redirectPath.includes('/remote')) {
+                    return 'remote';
+                }
+            }
             
-            // Check for specific paths
-            if (path.includes('/data')) {
+            // If no redirect path, check current path
+            const currentPath = window.location.pathname.toLowerCase();
+            if (currentPath.includes('/data')) {
                 return 'data';
-            } else if (path.includes('/invest')) {
+            } else if (currentPath.includes('/invest')) {
                 return 'investment';
-            } else if (path.includes('/remote')) {
+            } else if (currentPath.includes('/remote')) {
                 return 'remote';
             }
             
