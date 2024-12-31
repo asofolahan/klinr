@@ -96,8 +96,8 @@
         // Bucket
         function getVariant() {
             // Check for redirected path first
-            let source = ''; // Default source
-            let variant = '';
+            let source = 'random'; // Default source
+            let variant = Math.random() < 0.33 ? 'data' : Math.random() < 0.66 ? 'investment' : 'remote'; // Random selection
             const redirectPath = sessionStorage.getItem('redirectPath');
             if (redirectPath) {
                 // Clear it immediately to prevent future interference
@@ -134,10 +134,6 @@
             } else if (currentPath.includes('/remote')) {
                 variant = 'remote';
                 source = 'direct';
-            } else {
-                // Random selection
-                variant = Math.random() < 0.33 ? 'data' : Math.random() < 0.66 ? 'investment' : 'remote';
-                source = 'random';
             }
             
             // Track variant selection
