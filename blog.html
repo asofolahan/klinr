@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Numr Real Estate Intelligence</title>
+  <meta name="description" content="Insights on Nigerian real estate, tax compliance, diaspora investing, and market data from the Numr team.">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4TX4QD73YT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4TX4QD73YT');
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+
+  <!-- Shared design system -->
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ── BLOG HERO ── */
+    .blog-hero {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 72px 28px 64px;
+    }
+    .blog-hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--indigo-600);
+      margin-bottom: 16px;
+    }
+    .blog-hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.10;
+      color: var(--ink);
+      letter-spacing: -0.8px;
+      margin-bottom: 20px;
+      max-width: 640px;
+    }
+    .blog-hero h1 em { font-style: italic; color: var(--indigo-700); }
+    .blog-hero p {
+      font-size: 17px;
+      color: var(--ink-muted);
+      line-height: 1.65;
+      max-width: 560px;
+      margin-bottom: 32px;
+    }
+
+    /* Medium notice */
+    .medium-notice {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--indigo-50);
+      border: 1px solid var(--indigo-200);
+      border-radius: var(--radius-md);
+      padding: 12px 18px;
+      font-size: 13px;
+      color: var(--indigo-700);
+      text-decoration: none;
+    }
+    .medium-notice strong { font-weight: 600; }
+    .medium-notice svg { flex-shrink: 0; }
+
+    /* ── FILTERS ── */
+    .filters {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 28px;
+      position: sticky;
+      top: var(--nav-h);
+      z-index: 90;
+    }
+    .filters-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .filter-pill {
+      padding: 7px 16px;
+      border-radius: 100px;
+      border: 1px solid var(--border-md);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--ink-muted);
+      background: var(--white);
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .filter-pill:hover { color: var(--ink); border-color: var(--indigo-400); }
+    .filter-pill.active {
+      background: var(--indigo-50);
+      border-color: var(--indigo-600);
+      color: var(--indigo-700);
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .blog-main {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 28px 96px;
+    }
+
+    /* Featured article */
+    .featured-article {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      margin-bottom: 48px;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .featured-article:hover {
+      box-shadow: 0 20px 60px rgba(79,70,229,0.10);
+      transform: translateY(-3px);
+    }
+    .featured-thumb {
+      background: linear-gradient(135deg, var(--indigo-800) 0%, var(--indigo-600) 100%);
+      min-height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .featured-thumb::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+    }
+    .featured-thumb::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: -30px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .featured-thumb-icon {
+      position: relative;
+      z-index: 1;
+      opacity: 0.7;
+    }
+    .featured-body {
+      padding: 48px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .featured-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--indigo-50);
+      color: var(--indigo-700);
+      border: 1px solid var(--indigo-200);
+      border-radius: 100px;
+      padding: 4px 12px;
+      margin-bottom: 20px;
+      width: fit-content;
+    }
+    .featured-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: var(--ink);
+      line-height: 1.25;
+      letter-spacing: -0.3px;
+      margin-bottom: 16px;
+    }
+    .featured-excerpt {
+      font-size: 15px;
+      color: var(--ink-muted);
+      line-height: 1.68;
+      margin-bottom: 28px;
+    }
+    .featured-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--ink-faint);
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    .featured-read {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--indigo-600);
+      margin-left: auto;
+    }
+
+    /* Grid articles */
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 24px;
+    }
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .article-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .article-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(79,70,229,0.09);
+      border-color: var(--indigo-200);
+    }
+    .article-thumb {
+      height: 148px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .article-body {
+      padding: 28px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .article-cat {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--indigo-600);
+      margin-bottom: 10px;
+    }
+    .article-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 19px;
+      color: var(--ink);
+      line-height: 1.35;
+      margin-bottom: 12px;
+      letter-spacing: -0.2px;
+      flex: 1;
+    }
+    .article-excerpt {
+      font-size: 13px;
+      color: var(--ink-muted);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+    .article-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--ink-faint);
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    .article-arrow {
+      color: var(--indigo-500);
+      font-weight: 600;
+    }
+
+    /* ── CTA STRIP ── */
+    .cta-strip {
+      background: linear-gradient(135deg, var(--indigo-900) 0%, var(--indigo-700) 100%);
+      border-radius: var(--radius-xl);
+      padding: 56px 48px;
+      margin-top: 64px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px;
+      align-items: center;
+    }
+    .cta-strip h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: #fff;
+      letter-spacing: -0.3px;
+      margin-bottom: 10px;
+    }
+    .cta-strip h2 em { font-style: italic; color: var(--indigo-400); }
+    .cta-strip p { font-size: 15px; color: rgba(255,255,255,0.60); line-height: 1.65; }
+    .cta-form {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .cta-form input {
+      width: 260px;
+      height: 48px;
+      border: 1.5px solid rgba(255,255,255,0.18);
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 0 16px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .cta-form input::placeholder { color: rgba(255,255,255,0.38); }
+    .cta-form input:focus { border-color: var(--indigo-400); }
+    .cta-form button {
+      height: 48px;
+      padding: 0 24px;
+      background: var(--indigo-500);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .cta-form button:hover { background: var(--indigo-400); }
+    .cta-success {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .featured-article { grid-template-columns: 1fr; }
+      .featured-thumb { min-height: 220px; }
+      .articles-grid { grid-template-columns: repeat(2, 1fr); }
+      .cta-strip { grid-template-columns: 1fr; gap: 28px; }
+      .cta-form input { width: 100%; }
+    }
+    @media (max-width: 768px) {
+      .articles-grid { grid-template-columns: 1fr; }
+      .filters { position: static; }
+      .blog-hero { padding: 56px 24px 48px; }
+      .featured-body { padding: 32px 28px; }
+      .cta-strip { padding: 40px 28px; }
+    }
+    @media (max-width: 480px) {
+      .cta-form { flex-direction: column; }
+      .cta-form input, .cta-form button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo-wrap">
+        <img src="src/img/numr-logo.png" alt="Numr logo" class="nav-logo-img">
+        <span class="nav-logo-text">Numr</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="tax-calculator.html">Tax Calculator</a></li>
+        <li><a href="blog.html" class="active">Blog</a></li>
+        <li><a href="research-analyst.html">Careers</a></li>
+        <li><a href="mailto:contact@usenumr.com">Contact</a></li>
+      </ul>
+      <a href="/#waitlist" class="nav-cta">Get early access</a>
+    </div>
+  </nav>
+
+  <!-- ── BLOG HERO ── -->
+  <div class="blog-hero">
+    <div class="blog-hero-inner">
+      <div class="eyebrow">Numr Insights</div>
+      <h1>Real estate intelligence<br>for <em>every</em> investor</h1>
+      <p>Market analysis, tax compliance guides, and investment strategy — written for local investors, developers, and the Nigerian diaspora.</p>
+      <a class="medium-notice" href="https://medium.com" target="_blank" rel="noopener" onclick="gtag('event','medium_click',{event_category:'engagement',event_label:'blog_hero_banner'})">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+        <span>Our full articles are published on <strong>Medium</strong> — follow @UseNumr to read them.</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── CATEGORY FILTERS ── -->
+  <div class="filters">
+    <div class="filters-inner">
+      <span class="filter-pill active">All</span>
+      <span class="filter-pill">Tax &amp; Compliance</span>
+      <span class="filter-pill">Diaspora Investing</span>
+      <span class="filter-pill">Market Data</span>
+      <span class="filter-pill">Strategy</span>
+    </div>
+  </div>
+
+  <!-- ── MAIN CONTENT ── -->
+  <div class="blog-main">
+
+    <!-- Featured article -->
+    <a href="#" class="featured-article">
+      <div class="featured-thumb">
+        <svg class="featured-thumb-icon" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+        </svg>
+      </div>
+      <div class="featured-body">
+        <div class="featured-label">Featured &middot; Tax &amp; Compliance</div>
+        <div class="featured-title">What the Nigeria Tax Act 2025 Means for Every Property Transaction</div>
+        <p class="featured-excerpt">CGT tripled for companies. New stamp duty timelines. VAT exemptions clarified. Rent deductions for individuals. The NTA 2025 is the biggest overhaul of Nigerian real estate tax in a decade — here's a plain-English breakdown of everything that changed, and what it means for your next deal.</p>
+        <div class="featured-meta">
+          <span>Jan 2026</span>
+          <span>&middot;</span>
+          <span>6 min read</span>
+          <span class="featured-read">
+            Read on Medium
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Articles grid -->
+    <div class="section-label">All articles</div>
+    <div class="articles-grid">
+
+      <a href="#" class="article-card">
+        <div class="article-thumb" style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8">
+            <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div class="article-body">
+          <div class="article-cat">Diaspora Investing</div>
+          <div class="article-title">Buying Nigerian Property from Abroad: Your 2025 Complete Guide</div>
+          <p class="article-excerpt">From structuring your purchase to navigating CGT as a foreign-based buyer — a step-by-step breakdown built for investors in the UK, US, and Canada.</p>
+          <div class="article-meta">
+            <span>Feb 2026 &middot; 8 min read</span>
+            <span class="article-arrow">&rarr;</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="article-card">
+        <div class="article-thumb" style="background: linear-gradient(135deg, #EEF2FF 0%, #C7D2FE 100%);">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8">
+            <path d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <div class="article-body">
+          <div class="article-cat">Market Data</div>
+          <div class="article-title">Ikoyi vs. Lekki: Where Are Lagos Property Prices Headed in 2026?</div>
+          <p class="article-excerpt">We analysed 400+ listings across both markets. Here's what the data shows about price trajectories, rental yields, and neighbourhood value gaps.</p>
+          <div class="article-meta">
+            <span>Mar 2026 &middot; 5 min read</span>
+            <span class="article-arrow">&rarr;</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="article-card">
+        <div class="article-thumb" style="background: linear-gradient(135deg, #ECFDF5 0%, #A7F3D0 100%);">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8">
+            <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+          </svg>
+        </div>
+        <div class="article-body">
+          <div class="article-cat">Tax &amp; Compliance</div>
+          <div class="article-title">The 30-Day Stamp Duty Rule: A Buyer's Compliance Checklist</div>
+          <p class="article-excerpt">Miss the 30-day window and your purchase instrument becomes legally inadmissible. Here's the exact checklist to stay compliant — and avoid costly delays.</p>
+          <div class="article-meta">
+            <span>Mar 2026 &middot; 4 min read</span>
+            <span class="article-arrow">&rarr;</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="article-card">
+        <div class="article-thumb" style="background: linear-gradient(135deg, #FFF1F2 0%, #FECDD3 100%);">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8">
+            <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+          </svg>
+        </div>
+        <div class="article-body">
+          <div class="article-cat">Strategy</div>
+          <div class="article-title">Personal Ownership vs. SPV: Which Is Right for Your Nigerian Property?</div>
+          <p class="article-excerpt">At 30% flat CGT for companies vs. progressive rates for individuals, the structuring decision has never mattered more. Here's how to think through it.</p>
+          <div class="article-meta">
+            <span>Apr 2026 &middot; 7 min read</span>
+            <span class="article-arrow">&rarr;</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="article-card">
+        <div class="article-thumb" style="background: linear-gradient(135deg, #F0F9FF 0%, #BAE6FD 100%);">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8">
+            <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div class="article-body">
+          <div class="article-cat">Market Data</div>
+          <div class="article-title">Rental Yields in Abuja 2026: Which Districts Are Outperforming?</div>
+          <p class="article-excerpt">Maitama, Asokoro, Garki, Wuse — we ranked Abuja's top residential districts by gross rental yield. The results may surprise you.</p>
+          <div class="article-meta">
+            <span>Apr 2026 &middot; 6 min read</span>
+            <span class="article-arrow">&rarr;</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="tax-calculator.html" class="article-card" style="border: 1px dashed rgba(79,70,229,0.30); background: var(--indigo-50);">
+        <div class="article-thumb" style="background: linear-gradient(135deg, var(--indigo-600) 0%, var(--indigo-800) 100%);">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8">
+            <path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <div class="article-body">
+          <div class="article-cat" style="color: var(--indigo-600);">Free Tool</div>
+          <div class="article-title">Nigeria Real Estate Tax Calculator</div>
+          <p class="article-excerpt">Don't just read about the taxes — calculate your exact transaction costs in 60 seconds. Stamp duty, CGT, VAT, and WHT. NTA 2025 updated.</p>
+          <div class="article-meta">
+            <span>Free &middot; No account needed</span>
+            <span style="font-weight:600; color: var(--indigo-600);">Try it &rarr;</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- CTA Strip -->
+    <div class="cta-strip">
+      <div>
+        <h2>Get <em>weekly</em> market intelligence</h2>
+        <p>New articles, tool updates, and Nigeria real estate insights — straight to your inbox. No noise, just signal.</p>
+      </div>
+      <div>
+        <form class="cta-form" id="blogCtaForm">
+          <input type="email" placeholder="your@email.com" required>
+          <button type="submit">Subscribe</button>
+        </form>
+        <div class="cta-success" id="blogCtaSuccess">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="#818CF8" stroke-width="2" stroke-linecap="round"/></svg>
+          You're subscribed!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SITE FOOTER ── -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <a href="/" class="footer-logo">num<span>r</span></a>
+          <p class="footer-tagline">Nigeria's real estate intelligence platform. Built for local investors, developers, and the diaspora — focused on Lagos and Abuja.</p>
+          <div class="footer-social">
+            <a href="mailto:contact@usenumr.com" title="Email">
+              <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+            </a>
+            <a href="https://whatsapp.com/channel/0029VaxckNBJ3jv4cRXSWt10" target="_blank" rel="noopener" title="WhatsApp">
+              <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </a>
+            <a href="https://x.com/Use_Numr" target="_blank" rel="noopener" title="Twitter / X">
+              <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/106111779" target="_blank" rel="noopener" title="LinkedIn">
+              <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Tools</div>
+          <ul class="footer-links">
+            <li><a href="tax-calculator.html">Tax Calculator</a></li>
+            <li><a href="/#tools">Market Dashboard <span style="font-size:10px;opacity:0.5">(soon)</span></a></li>
+            <li><a href="/#tools">ROI Calculator <span style="font-size:10px;opacity:0.5">(soon)</span></a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links">
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="research-analyst.html">Careers</a></li>
+            <li><a href="mailto:contact@usenumr.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links">
+            <li><a href="blog.html">NTA 2025 Guide</a></li>
+            <li><a href="blog.html">Diaspora Investing</a></li>
+            <li><a href="blog.html">Market Reports</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Numr &mdash; Nigeria&rsquo;s Real Estate Intelligence Platform.</p>
+        <p>Not a licensed tax adviser. All tools for planning purposes only.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwo5bg86p9HlwqTNDowXeP2f9GHCmr6KF3uL_Xsju3O50vznSwnb4C3VBxFsDNXwIXZ/exec';
+
+    document.getElementById('blogCtaForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = this.querySelector('input').value;
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ email, source: 'blog_cta', timestamp: new Date().toISOString() }),
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        gtag('event', 'generate_lead', { event_category: 'conversion', event_label: 'blog_newsletter' });
+      } catch (err) {
+        console.error(err);
+      } finally {
+        this.style.display = 'none';
+        document.getElementById('blogCtaSuccess').style.display = 'flex';
+      }
+    });
+
+    // Filter pills — visual only (no routing needed for dummy blog)
+    document.querySelectorAll('.filter-pill').forEach(function(pill) {
+      pill.addEventListener('click', function() {
+        document.querySelectorAll('.filter-pill').forEach(function(p) { p.classList.remove('active'); });
+        this.classList.add('active');
+        gtag('event', 'filter_click', { event_category: 'blog', event_label: this.textContent.trim() });
+      });
+    });
+
+    // Nav link clicks
+    document.querySelectorAll('.nav-links a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        gtag('event', 'nav_click', { event_category: 'navigation', event_label: this.textContent.trim() });
+      });
+    });
+
+    // Featured article click
+    var featured = document.querySelector('.featured-article');
+    if (featured) {
+      featured.addEventListener('click', function() {
+        gtag('event', 'article_click', { event_category: 'blog', event_label: 'featured_nta_2025' });
+      });
+    }
+
+    // Article grid card clicks
+    document.querySelectorAll('.articles-grid .article-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        var title = this.querySelector('.article-title');
+        gtag('event', 'article_click', { event_category: 'blog', event_label: title ? title.textContent.trim() : 'unknown' });
+      });
+    });
+
+    // Footer social link clicks
+    document.querySelectorAll('.footer-social a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        gtag('event', 'social_click', { event_category: 'social', event_label: this.getAttribute('title') || this.href });
+      });
+    });
+  </script>
+</body>
+</html>

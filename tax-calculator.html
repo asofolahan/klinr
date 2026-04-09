@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nigeria Real Estate Tax Calculator — Numr</title>
+  <meta name="description" content="Instant breakdown of stamp duty, CGT, VAT, and WHT for any Nigerian property transaction. Updated for the Nigeria Tax Act 2025.">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4TX4QD73YT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4TX4QD73YT');
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+
+  <!-- Shared styles (tokens, nav, footer) -->
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ── CALCULATOR PAGE STYLES ── */
+
+    .calc-page {
+      max-width: 580px;
+      margin: 0 auto;
+      padding: 48px 20px 100px;
+    }
+
+    /* ── PAGE HERO ── */
+    .hero {
+      margin-bottom: 40px;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--indigo-600);
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(28px, 6vw, 40px);
+      line-height: 1.13;
+      color: var(--ink);
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+    .hero h1 em { font-style: italic; color: var(--indigo-700); }
+    .hero p { font-size: 15px; color: var(--ink-muted); line-height: 1.68; max-width: 440px; }
+
+    /* ── PROGRESS STEPS ── */
+    .progress-wrap { display: flex; gap: 6px; margin-bottom: 28px; }
+    .progress-seg {
+      height: 3px;
+      border-radius: 2px;
+      flex: 1;
+      background: var(--border);
+      transition: background 0.3s ease;
+    }
+    .progress-seg.done { background: var(--indigo-600); }
+    .progress-seg.active { background: var(--indigo-400); }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 20px;
+    }
+
+    /* ── FIELD ── */
+    .field { margin-bottom: 22px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .field-label .opt { font-size: 12px; font-weight: 400; color: var(--ink-faint); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    select {
+      width: 100%;
+      height: 46px;
+      border: 1px solid var(--border-md);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      padding: 0 14px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--indigo-600);
+      box-shadow: 0 0 0 3px rgba(79,70,229,0.14);
+    }
+    input::placeholder { color: var(--ink-faint); }
+
+    .input-prefix-wrap { position: relative; }
+    .input-prefix {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: var(--ink-faint);
+      pointer-events: none;
+      font-weight: 500;
+    }
+    .input-prefix-wrap input { padding-left: 34px; }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    /* ── PILL TOGGLES ── */
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1px solid var(--border-md);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--ink-muted);
+      background: var(--white);
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .pill:hover { border-color: var(--indigo-400); color: var(--ink); }
+    .pill.active {
+      background: var(--indigo-50);
+      border-color: var(--indigo-600);
+      color: var(--indigo-800);
+    }
+
+    /* ── BUTTONS ── */
+    .btn-calculate {
+      display: block;
+      width: 100%;
+      height: 52px;
+      background: var(--indigo-600);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-calculate:hover { background: var(--indigo-700); }
+    .btn-calculate:active { transform: scale(0.99); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border: 1px solid var(--border-md);
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-muted);
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+    .btn-secondary:hover { background: var(--surface); color: var(--ink); }
+
+    .btn-whatsapp {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      background: #25D366;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .btn-whatsapp:hover { opacity: 0.88; }
+
+    /* ── RESULTS HERO ── */
+    .results-hero {
+      background: linear-gradient(135deg, var(--indigo-800) 0%, var(--indigo-700) 100%);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      padding: 28px 28px 24px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .results-hero::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(129,140,248,0.15);
+    }
+    .results-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; left: -20px;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: rgba(129,140,248,0.10);
+    }
+    .results-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--indigo-200);
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    .results-context { font-size: 13px; color: rgba(255,255,255,0.60); margin-bottom: 6px; position: relative; z-index: 1; }
+    .results-total {
+      font-family: 'DM Serif Display', serif;
+      font-size: 44px;
+      color: #fff;
+      letter-spacing: -1px;
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 4px;
+    }
+    .results-sublabel { font-size: 13px; color: rgba(255,255,255,0.52); position: relative; z-index: 1; }
+
+    /* ── RESULTS BODY ── */
+    .results-body {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .line-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+    .line-item:last-child { border-bottom: none; }
+    .line-left { flex: 1; }
+    .line-name { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .line-note { font-size: 12px; color: var(--ink-faint); line-height: 1.5; }
+    .line-right { text-align: right; flex-shrink: 0; }
+    .line-amount { font-size: 15px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .line-amount.zero { color: var(--indigo-600); }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 100px;
+      margin-top: 4px;
+    }
+    .badge-exempt { background: var(--indigo-50); color: var(--indigo-700); border: 1px solid var(--indigo-200); }
+    .badge-applies { background: var(--amber-50); color: var(--amber-600); border: 1px solid var(--amber-100); }
+
+    /* ── INSIGHTS ── */
+    .insight {
+      background: var(--amber-50);
+      border: 1px solid var(--amber-100);
+      border-left: 3px solid var(--amber-400);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .insight-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--amber-600);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .insight-text { font-size: 13px; color: #6B4A0A; line-height: 1.6; }
+
+    /* ── LEAD CAPTURE ── */
+    .cta-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .cta-header { padding: 28px 28px 0; }
+    .cta-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px; }
+    .cta-sub { font-size: 14px; color: var(--ink-muted); line-height: 1.65; margin-bottom: 24px; }
+    .cta-body { padding: 0 28px 28px; }
+    .cta-field { margin-bottom: 14px; }
+    .cta-field label { display: block; font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+    .cta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .btn-cta {
+      display: block;
+      width: 100%;
+      height: 52px;
+      background: var(--indigo-600);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      margin-top: 6px;
+    }
+    .btn-cta:hover { background: var(--indigo-700); }
+    .btn-cta:active { transform: scale(0.99); }
+
+    .success-banner {
+      background: var(--indigo-50);
+      border-top: 1px solid var(--indigo-200);
+      padding: 20px 28px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+    }
+    .success-icon {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--indigo-600);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .success-text { font-size: 13px; color: var(--indigo-800); line-height: 1.5; }
+    .success-text strong { font-weight: 600; display: block; margin-bottom: 2px; }
+
+    /* ── ACTIONS ── */
+    .action-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+
+    /* ── DISCLAIMER ── */
+    .disclaimer {
+      font-size: 11px;
+      color: var(--ink-faint);
+      line-height: 1.75;
+      padding: 20px 4px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+    .calc-footer { text-align: center; padding: 20px 0 0; font-size: 12px; color: var(--ink-faint); }
+    .calc-footer a { color: var(--indigo-600); text-decoration: none; font-weight: 500; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.35s ease forwards; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .field-row, .cta-row { grid-template-columns: 1fr; }
+      .card { padding: 22px 20px; }
+      .results-hero { padding: 24px 20px 20px; }
+      .results-body .line-item { padding: 14px 20px; }
+      .cta-header { padding: 24px 20px 0; }
+      .cta-body { padding: 0 20px 24px; }
+      .success-banner { padding: 18px 20px; }
+      .results-total { font-size: 36px; }
+    }
+
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- ── SITE NAV ── -->
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo-wrap">
+        <img src="src/img/numr-logo.png" alt="Numr logo" class="nav-logo-img">
+        <span class="nav-logo-text">Numr</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="tax-calculator.html" class="active">Tax Calculator</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="research-analyst.html">Careers</a></li>
+        <li><a href="mailto:contact@usenumr.com">Contact</a></li>
+      </ul>
+      <span class="nav-badge">NTA 2025 Updated</span>
+    </div>
+  </nav>
+
+  <!-- ── CALCULATOR ── -->
+  <div class="calc-page">
+
+    <div class="hero fade-up">
+      <div class="hero-eyebrow">Nigeria real estate &middot; Free tool</div>
+      <h1>Know exactly what your<br><em>transaction costs</em></h1>
+      <p>Instant breakdown of stamp duty, CGT, VAT status, and withholding tax &mdash; updated for the Nigeria Tax Act 2025, effective January 2026.</p>
+    </div>
+
+    <!-- STEP 1: FORM -->
+    <div id="step-form" class="fade-up">
+      <div class="progress-wrap">
+        <div class="progress-seg active"></div>
+        <div class="progress-seg"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Transaction details</div>
+
+        <div class="field">
+          <div class="field-label">What are you doing?</div>
+          <div class="pills" id="pg-txn">
+            <div class="pill active" data-val="buy" onclick="pick('pg-txn',this)">Buying property</div>
+            <div class="pill" data-val="sell" onclick="pick('pg-txn',this)">Selling property</div>
+            <div class="pill" data-val="lease" onclick="pick('pg-txn',this)">Lease / rent</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">Entity type</div>
+          <div class="pills" id="pg-entity">
+            <div class="pill active" data-val="individual" onclick="pick('pg-entity',this)">Individual</div>
+            <div class="pill" data-val="company" onclick="pick('pg-entity',this)">Company / SPV</div>
+            <div class="pill" data-val="reit" onclick="pick('pg-entity',this)">REIT / REIC</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">Property location</div>
+          <div class="pills" id="pg-loc">
+            <div class="pill active" data-val="lagos" onclick="pick('pg-loc',this)">Lagos</div>
+            <div class="pill" data-val="abuja" onclick="pick('pg-loc',this)">Abuja</div>
+            <div class="pill" data-val="ph" onclick="pick('pg-loc',this)">Port Harcourt</div>
+            <div class="pill" data-val="other" onclick="pick('pg-loc',this)">Other state</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="card-propval">
+        <div class="card-title">Property value</div>
+        <div class="field">
+          <div class="field-label">Property / sale price</div>
+          <div class="input-prefix-wrap">
+            <span class="input-prefix">&#8358;</span>
+            <input type="text" id="prop-value" placeholder="50,000,000" oninput="fmtInput(this)">
+          </div>
+        </div>
+        <div class="field" id="field-acq" hidden>
+          <div class="field-label">Original acquisition cost <span class="opt">&#8212; for CGT</span></div>
+          <div class="input-prefix-wrap">
+            <span class="input-prefix">&#8358;</span>
+            <input type="text" id="acq-cost" placeholder="30,000,000" oninput="fmtInput(this)">
+          </div>
+        </div>
+        <div class="field" id="field-improve" hidden>
+          <div class="field-label">Renovation / improvement costs <span class="opt">&#8212; optional</span></div>
+          <div class="input-prefix-wrap">
+            <span class="input-prefix">&#8358;</span>
+            <input type="text" id="improve-cost" placeholder="5,000,000" oninput="fmtInput(this)">
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="card-lease" hidden>
+        <div class="card-title">Lease details</div>
+        <div class="field-row">
+          <div class="field">
+            <div class="field-label">Annual rent</div>
+            <div class="input-prefix-wrap">
+              <span class="input-prefix">&#8358;</span>
+              <input type="text" id="annual-rent" placeholder="2,000,000" oninput="fmtInput(this)">
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">Lease duration (years)</div>
+            <input type="text" id="lease-years" placeholder="e.g. 3" style="text-align:center">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-calculate" onclick="calculate()">Calculate my transaction costs &rarr;</button>
+    </div>
+
+    <!-- STEP 2: RESULTS -->
+    <div id="step-results" hidden>
+      <div class="progress-wrap">
+        <div class="progress-seg done"></div>
+        <div class="progress-seg done"></div>
+      </div>
+
+      <div style="margin-bottom:16px" class="fade-up">
+        <div class="results-hero">
+          <div class="results-label">Total additional costs</div>
+          <div class="results-context" id="res-context"></div>
+          <div class="results-total" id="res-total"></div>
+          <div class="results-sublabel" id="res-sublabel"></div>
+        </div>
+        <div class="results-body" id="res-body"></div>
+      </div>
+
+      <div id="res-insights" class="fade-up"></div>
+
+      <div class="cta-card fade-up">
+        <div class="cta-header">
+          <div class="cta-title">Get the full tax report</div>
+          <div class="cta-sub">We&rsquo;ll send a detailed PDF with compliance deadlines, structuring tips, and a checklist tailored to your transaction &mdash; straight to your inbox.</div>
+        </div>
+        <div class="cta-body" id="cta-form-wrap">
+          <div class="cta-row">
+            <div class="cta-field">
+              <label for="lead-name">Full name</label>
+              <input type="text" id="lead-name" placeholder="Adebayo Okafor">
+            </div>
+            <div class="cta-field">
+              <label for="lead-role">I am a&hellip;</label>
+              <select id="lead-role">
+                <option value="">Select role</option>
+                <option>Investor / buyer</option>
+                <option>Diaspora investor</option>
+                <option>Property developer</option>
+                <option>Real estate agent</option>
+                <option>Legal / finance professional</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="cta-row">
+            <div class="cta-field">
+              <label for="lead-email">Email address</label>
+              <input type="email" id="lead-email" placeholder="you@example.com">
+            </div>
+            <div class="cta-field">
+              <label for="lead-phone">Phone / WhatsApp</label>
+              <input type="tel" id="lead-phone" placeholder="+234 or +1&hellip;">
+            </div>
+          </div>
+          <button class="btn-cta" onclick="submitLead()">Send me the full report</button>
+        </div>
+        <div class="success-banner" id="cta-success">
+          <div class="success-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="success-text">
+            <strong>Report on its way!</strong>
+            Check your inbox &mdash; a Numr advisor may also reach out.
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row fade-up">
+        <button class="btn-secondary" onclick="gtag('event','calculator_reset',{event_category:'tool_engagement'});resetCalc()">&larr; New calculation</button>
+        <a class="btn-whatsapp" href="https://whatsapp.com/channel/0029VaxckNBJ3jv4cRXSWt10" target="_blank" rel="noopener" onclick="gtag('event','social_click',{event_category:'social',event_label:'whatsapp_calculator'})">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Follow on WhatsApp
+        </a>
+      </div>
+
+      <div class="disclaimer">
+        Estimates are based on the Nigeria Tax Act 2025 (signed June 26, 2025, effective January 1, 2026). All figures are indicative and for planning purposes only. Stamp duty rates, CGT treatment, and WHT obligations may vary by state and specific transaction structure. Numr is not a licensed tax adviser &mdash; please consult a qualified Nigerian tax professional before transacting.
+      </div>
+      <div class="calc-footer">Built by <a href="/">Numr</a> &mdash; Nigeria&rsquo;s real estate intelligence platform</div>
+    </div>
+  </div>
+
+  <!-- ── SITE FOOTER ── -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <a href="/" class="footer-logo">num<span>r</span></a>
+          <p class="footer-tagline">Nigeria's real estate intelligence platform. Built for local investors, developers, and the diaspora.</p>
+          <div class="footer-social">
+            <a href="mailto:contact@usenumr.com" title="Email"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></a>
+            <a href="https://whatsapp.com/channel/0029VaxckNBJ3jv4cRXSWt10" target="_blank" rel="noopener" title="WhatsApp"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+            <a href="https://x.com/Use_Numr" target="_blank" rel="noopener" title="Twitter / X"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/></svg></a>
+            <a href="https://www.linkedin.com/company/106111779" target="_blank" rel="noopener" title="LinkedIn"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title">Tools</div>
+          <ul class="footer-links">
+            <li><a href="tax-calculator.html">Tax Calculator</a></li>
+            <li><a href="/#tools">Market Dashboard <span style="font-size:10px;opacity:0.5">(soon)</span></a></li>
+            <li><a href="/#tools">ROI Calculator <span style="font-size:10px;opacity:0.5">(soon)</span></a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links">
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="research-analyst.html">Careers</a></li>
+            <li><a href="mailto:contact@usenumr.com">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links">
+            <li><a href="blog.html">NTA 2025 Guide</a></li>
+            <li><a href="blog.html">Diaspora Investing</a></li>
+            <li><a href="blog.html">Market Reports</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Numr &mdash; Not a licensed tax adviser. All tools for planning purposes only.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwo5bg86p9HlwqTNDowXeP2f9GHCmr6KF3uL_Xsju3O50vznSwnb4C3VBxFsDNXwIXZ/exec';
+
+    function getActive(groupId) {
+      var el = document.querySelector('#' + groupId + ' .pill.active');
+      return el ? el.dataset.val : '';
+    }
+    function pick(groupId, el) {
+      document.querySelectorAll('#' + groupId + ' .pill').forEach(function(p) { p.classList.remove('active'); });
+      el.classList.add('active');
+      syncFields();
+    }
+    function fmtInput(el) {
+      var raw = el.value.replace(/[^0-9]/g, '');
+      if (raw === '') { el.value = ''; return; }
+      el.value = parseInt(raw, 10).toLocaleString('en-NG');
+    }
+    function parseField(id) {
+      var el = document.getElementById(id);
+      if (!el) return 0;
+      return parseFloat(el.value.replace(/[^0-9.]/g, '')) || 0;
+    }
+    function fmt(n) { return '\u20A6' + Math.round(n).toLocaleString('en-NG'); }
+
+    function syncFields() {
+      var txn = getActive('pg-txn');
+      document.getElementById('card-propval').hidden = txn === 'lease';
+      document.getElementById('card-lease').hidden = txn !== 'lease';
+      document.getElementById('field-acq').hidden = txn !== 'sell';
+      document.getElementById('field-improve').hidden = txn !== 'sell';
+    }
+
+    function calculate() {
+      var txn = getActive('pg-txn');
+      var entity = getActive('pg-entity');
+      var loc = getActive('pg-loc');
+      var locLabel = { lagos:'Lagos', abuja:'Abuja', ph:'Port Harcourt', other:'Nigeria' }[loc] || 'Nigeria';
+      var entityLabel = { individual:'Individual', company:'Company / SPV', reit:'REIT / REIC' }[entity] || '';
+
+      var items = [], total = 0, insights = [];
+      var contextLine = '', sublabel = 'Additional costs on top of property price';
+
+      if (txn === 'buy') {
+        var pv = parseField('prop-value');
+        if (!pv) { alert('Please enter the property value.'); return; }
+        var stamp = pv * 0.015;
+        items.push({ name:'Stamp duty', note:'1.5% on conveyance instrument — must be paid within 30 days of signing', amount:stamp, badge:null });
+        total += stamp;
+        items.push({ name:'VAT on purchase', note:'Exempt — land and property sales are VAT-free under NTA 2025 (Sec. 186)', amount:0, badge:'exempt' });
+        var regFee = pv * 0.003;
+        items.push({ name:'Land registry & consent fee', note:'Est. 0.3% — exact rate varies by state land registry', amount:regFee, badge:null });
+        total += regFee;
+        var legalFee = pv * 0.025;
+        items.push({ name:'Legal / solicitor fees', note:'Typically 2–5% of purchase price per Legal Practitioners Order', amount:legalFee, badge:null });
+        total += legalFee;
+        var agentFee = pv * 0.05;
+        items.push({ name:'Agent commission', note:'Standard 5–10% of purchase price', amount:agentFee, badge:null });
+        total += agentFee;
+        contextLine = fmt(pv) + ' property · ' + locLabel + ' · ' + entityLabel;
+        insights.push({ title:'30-day stamp duty deadline', text:'Your stamp duty of ' + fmt(stamp) + ' must be paid within 30 days of signing the purchase instrument. Unstamped documents are legally inadmissible under NTA 2025.' });
+        if (entity === 'company') insights.push({ title:'Structuring note for companies', text:'Buying as an individual means future capital gains are taxed at your progressive income rate (up to 25%). As a company or SPV, CGT on exit is 30% flat. Consider which ownership structure serves your exit strategy.' });
+        if (entity === 'reit') insights.push({ title:'REIT advantage', text:'As a REIT/REIC, distributions from rental income and dividends are exempt from further tax and WHT under Section 9(2)(d) of the NTA 2025.' });
+
+      } else if (txn === 'sell') {
+        var sp = parseField('prop-value');
+        if (!sp) { alert('Please enter the sale price.'); return; }
+        var ac = parseField('acq-cost') || sp * 0.5;
+        var imp = parseField('improve-cost');
+        var gain = Math.max(0, sp - ac - imp);
+        var cgtRate = entity === 'company' ? 0.30 : entity === 'reit' ? 0 : 0.15;
+        var cgt = gain * cgtRate;
+        var cgtNote = entity === 'company' ? '30% flat (corporate rate, NTA 2025) on gain of ' + fmt(gain) : entity === 'reit' ? 'Exempt under Sec. 9(2)(d) — REIT distributions not further taxed' : 'Progressive income tax rate ~15% est. on gain of ' + fmt(gain);
+        items.push({ name:'Capital gains tax (CGT)', note:cgtNote, amount:cgt, badge:entity === 'reit' ? 'exempt' : null });
+        total += cgt;
+        items.push({ name:'VAT on sale', note:'Exempt — residential property and land sales VAT-free (NTA 2025)', amount:0, badge:'exempt' });
+        var agentFee2 = sp * 0.05;
+        items.push({ name:'Agent commission', note:'Typically 5% of sale price', amount:agentFee2, badge:null });
+        total += agentFee2;
+        var legal2 = sp * 0.015;
+        items.push({ name:'Legal fees', note:'Est. 1–2.5% for conveyancing and title transfer', amount:legal2, badge:null });
+        total += legal2;
+        contextLine = 'Selling at ' + fmt(sp) + ' · ' + locLabel + ' · ' + entityLabel;
+        sublabel = 'Deductions from your sale proceeds';
+        if (gain > 0 && entity !== 'reit') insights.push({ title:'Document your cost basis carefully', text:'Your taxable gain is ' + fmt(gain) + '. The NTA 2025 taxes actual gain — keeping receipts for purchase costs and renovations directly reduces your CGT liability.' });
+        if (entity === 'company') insights.push({ title:'CGT tripled for companies', text:'The old rate was 10%. Under NTA 2025 it is 30% — an extra ' + fmt(gain * 0.20) + ' in tax on this transaction vs the old law.' });
+
+      } else if (txn === 'lease') {
+        var rent = parseField('annual-rent');
+        var yrs = parseField('lease-years') || 1;
+        if (!rent) { alert('Please enter the annual rent.'); return; }
+        var totalConsid = rent * yrs;
+        var sdRate = yrs < 7 ? 0.0078 : 0.03;
+        var stampLease = totalConsid * sdRate;
+        items.push({ name:'Stamp duty on lease', note:(yrs < 7 ? '0.78%' : '3%') + ' — lease ' + (yrs < 7 ? 'under' : 'over') + ' 7 years · Total consideration: ' + fmt(totalConsid), amount:stampLease, badge:null });
+        total += stampLease;
+        items.push({ name:'VAT on rent', note:'Exempt — a lease is a transfer of land interest, not a taxable supply of services (NTA 2025)', amount:0, badge:'exempt' });
+        if (entity !== 'individual') {
+          var wht = rent * 0.10;
+          items.push({ name:'Withholding tax on rent (WHT)', note:'10% withheld by corporate payer per year · Landlord receives ' + fmt(rent - wht) + '/yr net', amount:wht, badge:null });
+          total += wht;
+          insights.push({ title:'WHT remittance is your obligation', text:'As a company, you must withhold ' + fmt(wht) + ' per year and remit to the FIRS. Non-compliance creates liability for the payer.' });
+        }
+        var rentRelief = Math.min(rent * 0.20, 500000);
+        insights.push({ title:'Rent relief for individual tenants', text:'Individual tenants can deduct the lower of ₦500,000 or 20% of annual rent (' + fmt(rentRelief) + ') from taxable income.' });
+        insights.push({ title:'30-day stamp deadline', text:'Lease stamp duty of ' + fmt(stampLease) + ' must be paid within 30 days of signing. An unstamped lease is inadmissible in any Nigerian court.' });
+        contextLine = fmt(rent) + '/yr · ' + yrs + ' year' + (yrs !== 1 ? 's' : '') + ' · ' + locLabel + ' · ' + entityLabel;
+        sublabel = 'Upfront and annual costs to formalise this lease';
+      }
+
+      document.getElementById('res-context').textContent = contextLine;
+      document.getElementById('res-total').textContent = fmt(total);
+      document.getElementById('res-sublabel').textContent = sublabel;
+
+      document.getElementById('res-body').innerHTML = items.map(function(it) {
+        return '<div class="line-item"><div class="line-left"><div class="line-name">' + it.name + '</div><div class="line-note">' + it.note + '</div></div><div class="line-right"><div class="line-amount' + (it.amount === 0 ? ' zero' : '') + '">' + fmt(it.amount) + '</div>' + (it.badge ? '<span class="badge badge-' + (it.badge === 'exempt' ? 'exempt' : 'applies') + '">' + it.badge + '</span>' : '') + '</div></div>';
+      }).join('');
+
+      document.getElementById('res-insights').innerHTML = insights.map(function(ins) {
+        return '<div class="insight"><div class="insight-title">' + ins.title + '</div><div class="insight-text">' + ins.text + '</div></div>';
+      }).join('');
+
+      gtag('event', 'calculator_used', { event_category: 'tool_engagement', event_label: txn + '_' + entity });
+      document.getElementById('step-form').hidden = true;
+      document.getElementById('step-results').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function submitLead() {
+      var name = document.getElementById('lead-name').value.trim();
+      var email = document.getElementById('lead-email').value.trim();
+      if (!name || !email) { alert('Please enter your name and email address.'); return; }
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ email, name, role: document.getElementById('lead-role').value, phone: document.getElementById('lead-phone').value.trim(), source: 'tax_calculator_report', timestamp: new Date().toISOString() }),
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        gtag('event', 'generate_lead', { event_category: 'conversion', event_label: 'tax_calculator_report' });
+      } catch (err) {
+        console.error('Lead capture error:', err);
+      } finally {
+        document.getElementById('cta-form-wrap').style.display = 'none';
+        document.getElementById('cta-success').style.display = 'flex';
+      }
+    }
+
+    function resetCalc() {
+      document.getElementById('step-results').hidden = true;
+      document.getElementById('step-form').hidden = false;
+      document.getElementById('cta-form-wrap').style.display = 'block';
+      document.getElementById('cta-success').style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    syncFields();
+
+    // Nav link clicks
+    document.querySelectorAll('.nav-links a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        gtag('event', 'nav_click', { event_category: 'navigation', event_label: this.textContent.trim() });
+      });
+    });
+
+    // Footer social link clicks
+    document.querySelectorAll('.footer-social a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        gtag('event', 'social_click', { event_category: 'social', event_label: this.getAttribute('title') || this.href });
+      });
+    });
+  </script>
+</body>
+</html>
