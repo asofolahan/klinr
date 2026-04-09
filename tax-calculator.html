@@ -424,9 +424,9 @@
         <span class="nav-logo-text">Numr</span>
       </a>
       <ul class="nav-links">
-        <li><a href="tax-calculator.html" class="active">Tax Calculator</a></li>
+        <!-- <li><a href="tax-calculator.html" class="active">Tax Calculator</a></li> -->
         <li><a href="blog.html">Blog</a></li>
-        <li><a href="research-analyst.html">Careers</a></li>
+        <!-- <li><a href="research-analyst.html">Careers</a></li> -->
         <li><a href="mailto:contact@usenumr.com">Contact</a></li>
       </ul>
       <span class="nav-badge">NTA 2025 Updated</span>
@@ -773,6 +773,21 @@
         return '<div class="insight"><div class="insight-title">' + ins.title + '</div><div class="insight-text">' + ins.text + '</div></div>';
       }).join('');
 
+      // Save the report so it can be attached to lead captures
+      window.lastTaxReport = {
+        txn: txn,
+        entity: entity,
+        loc: loc,
+        locLabel: locLabel,
+        entityLabel: entityLabel,
+        context: contextLine,
+        sublabel: sublabel,
+        items: items,
+        total: total,
+        insights: insights,
+        generatedAt: new Date().toISOString()
+      };
+
       gtag('event', 'calculator_used', { event_category: 'tool_engagement', event_label: txn + '_' + entity });
       document.getElementById('step-form').hidden = true;
       document.getElementById('step-results').hidden = false;
@@ -783,14 +798,56 @@
       var name = document.getElementById('lead-name').value.trim();
       var email = document.getElementById('lead-email').value.trim();
       if (!name || !email) { alert('Please enter your name and email address.'); return; }
+
+      // Prevent duplicate submissions
+      var submitBtn = document.querySelector('.btn-cta');
+      if (submitBtn && submitBtn.dataset.submitted === 'true') return;
+      if (submitBtn) {
+        submitBtn.dataset.submitted = 'true';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.6';
+        submitBtn.style.cursor = 'not-allowed';
+      }
+      // Disable form inputs
+      var inputs = document.querySelectorAll('#cta-form-wrap input, #cta-form-wrap select');
+      inputs.forEach(function(i){ i.disabled = true; });
+
+      // Prepare compact summary of the report (smaller than full JSON)
+      var report = window.lastTaxReport || null;
+      var compact;
+      if (report) {
+        compact = {
+          txn: report.txn,
+          entity: report.entity,
+          loc: report.loc,
+          total: Math.round(report.total || 0),
+          items: (report.items || []).slice(0,3).map(function(it){ return { name: it.name, amount: Math.round(it.amount || 0) }; }),
+          generatedAt: report.generatedAt
+        };
+      } else {
+        compact = { note: 'no_report_available' };
+      }
+
+      var serialized = JSON.stringify(compact);
+
+      // Build source string in requested format: "tax_calculator_report | <serialized compact report>"
+      var sourceStr = 'tax_calculator_report | ' + serialized;
+
       try {
         await fetch(SCRIPT_URL, {
           method: 'POST',
-          body: JSON.stringify({ email, name, role: document.getElementById('lead-role').value, phone: document.getElementById('lead-phone').value.trim(), source: 'tax_calculator_report', timestamp: new Date().toISOString() }),
+          body: JSON.stringify({
+            email: email,
+            name: name,
+            role: document.getElementById('lead-role').value,
+            phone: document.getElementById('lead-phone').value.trim(),
+            source: sourceStr,
+            timestamp: new Date().toISOString()
+          }),
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' }
         });
-        gtag('event', 'generate_lead', { event_category: 'conversion', event_label: 'tax_calculator_report' });
+        if (typeof gtag === 'function') gtag('event', 'generate_lead', { event_category: 'conversion', event_label: 'tax_calculator_report' });
       } catch (err) {
         console.error('Lead capture error:', err);
       } finally {
