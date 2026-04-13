@@ -409,7 +409,7 @@
       <div class="eyebrow">Numr Insights</div>
       <h1>Real estate intelligence<br>for <em>every</em> investor</h1>
       <p>Market analysis, tax compliance guides, and investment strategy — written for local investors, developers, and the Nigerian diaspora.</p>
-      <a class="medium-notice" href="https://medium.com" target="_blank" rel="noopener" onclick="gtag('event','medium_click',{event_category:'engagement',event_label:'blog_hero_banner'})">
+      <a class="medium-notice" href="https://medium.com/@UseNumr" target="_blank" rel="noopener" onclick="gtag('event','medium_click',{event_category:'engagement',event_label:'blog_hero_banner'})">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
         <span>Our full articles are published on <strong>Medium</strong> — follow @UseNumr to read them.</span>
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -570,6 +570,7 @@
       </div>
       <div>
         <form class="cta-form" id="blogCtaForm">
+          <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true">
           <input type="email" placeholder="your@email.com" required>
           <button type="submit">Subscribe</button>
         </form>
@@ -617,7 +618,6 @@
           <div class="footer-col-title">Company</div>
           <ul class="footer-links">
             <li><a href="blog.html">Blog</a></li>
-            <li><a href="research-analyst.html">Careers</a></li>
             <li><a href="mailto:contact@usenumr.com">Contact</a></li>
           </ul>
         </div>
@@ -641,10 +641,30 @@
 
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwo5bg86p9HlwqTNDowXeP2f9GHCmr6KF3uL_Xsju3O50vznSwnb4C3VBxFsDNXwIXZ/exec';
+    const PAGE_LOAD_TIME = Date.now();
+
+    function isBotEmail(email) {
+      const local = email.split('@')[0];
+      const segments = local.split('.');
+      const dots = segments.length - 1;
+      if (dots > 4) return true;
+      if (/\.\d+$/.test(local)) return true;
+      if (dots > 2) {
+        const avgSegLen = local.replace(/\./g, '').length / segments.length;
+        if (avgSegLen < 4) return true;
+      }
+      return false;
+    }
 
     document.getElementById('blogCtaForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const email = this.querySelector('input').value;
+      const honeypot = this.querySelector('input[name="website"]');
+      if (honeypot && honeypot.value) return;
+      if (Date.now() - PAGE_LOAD_TIME < 3000) return;
+      const email = this.querySelector('input[type="email"]').value;
+      if (isBotEmail(email)) return;
+      if (this.dataset.submitted === 'true') return;
+      this.dataset.submitted = 'true';
       try {
         await fetch(SCRIPT_URL, {
           method: 'POST',

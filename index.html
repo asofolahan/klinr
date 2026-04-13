@@ -530,6 +530,8 @@
       <p class="hero-desc">Real-time market data, tax intelligence, and investment analytics for Nigeria's property market — built for local investors and the diaspora, starting with Lagos and Abuja.</p>
 
       <form class="hero-form" id="heroForm">
+        <!-- honeypot: hidden from humans, bots fill it -->
+        <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true">
         <input type="email" placeholder="Enter your email address" required>
         <button type="submit">Get early access</button>
       </form>
@@ -731,6 +733,7 @@
       <h2 class="cta-h2">Stay ahead of Nigeria's<br><em>real estate market</em></h2>
       <p class="cta-sub">Get weekly market intelligence, new tool announcements, and early access to Numr's full platform — straight to your inbox.</p>
       <form class="cta-form" id="ctaForm">
+        <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true">
         <input type="email" placeholder="Enter your email address" required>
         <button type="submit">Join the waitlist</button>
       </form>
@@ -799,20 +802,40 @@
 
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwo5bg86p9HlwqTNDowXeP2f9GHCmr6KF3uL_Xsju3O50vznSwnb4C3VBxFsDNXwIXZ/exec';
+    const PAGE_LOAD_TIME = Date.now();
+
+    // Detect bot-pattern emails: many short dot-separated segments, digits-only tail
+    function isBotEmail(email) {
+      const local = email.split('@')[0];
+      const segments = local.split('.');
+      const dots = segments.length - 1;
+      if (dots > 4) return true;                              // too many dots
+      if (/\.\d+$/.test(local)) return true;                 // ends with digits after dot
+      if (dots > 2) {
+        const avgSegLen = local.replace(/\./g, '').length / segments.length;
+        if (avgSegLen < 4) return true;                      // many very-short segments
+      }
+      return false;
+    }
 
     async function submitEmail(email, source, formEl, successEl) {
+      // Honeypot: if the hidden "website" field has a value, it's a bot
+      const honeypot = formEl.querySelector('input[name="website"]');
+      if (honeypot && honeypot.value) return;
+
+      // Minimum time on page: bots submit instantly (< 3 s)
+      if (Date.now() - PAGE_LOAD_TIME < 3000) return;
+
+      // Email pattern check
+      if (isBotEmail(email)) return;
+
       // Prevent duplicate submissions
       if (formEl.dataset.submitted === 'true') return;
       formEl.dataset.submitted = 'true';
 
-      // Disable inputs and button immediately to lock the form
-      const submitBtn = formEl.querySelector('button');
-      const inputEl = formEl.querySelector('input');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.6';
-        submitBtn.style.cursor = 'not-allowed';
-      }
+      const submitBtn = formEl.querySelector('button[type="submit"]');
+      const inputEl = formEl.querySelector('input[type="email"]');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.6'; submitBtn.style.cursor = 'not-allowed'; }
       if (inputEl) inputEl.disabled = true;
 
       try {
@@ -835,12 +858,12 @@
 
     document.getElementById('heroForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      submitEmail(this.querySelector('input').value, 'hero_form', this, document.getElementById('heroSuccess'));
+      submitEmail(this.querySelector('input[type="email"]').value, 'hero_form', this, document.getElementById('heroSuccess'));
     });
 
     document.getElementById('ctaForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      submitEmail(this.querySelector('input').value, 'cta_waitlist', this, document.getElementById('ctaSuccess'));
+      submitEmail(this.querySelector('input[type="email"]').value, 'cta_waitlist', this, document.getElementById('ctaSuccess'));
     });
 
     // Nav link clicks
