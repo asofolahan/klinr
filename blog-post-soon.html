@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coming Soon — Numr Blog</title>
+  <meta name="description" content="This article is being written. Subscribe to be notified when it publishes.">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4TX4QD73YT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4TX4QD73YT');
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .soon-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 96px 28px 120px;
+      text-align: center;
+    }
+    .soon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      background: var(--indigo-50);
+      color: var(--indigo-700);
+      border: 1px solid var(--indigo-200);
+      border-radius: 100px;
+      padding: 5px 14px;
+      margin-bottom: 28px;
+    }
+    .soon-badge span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--indigo-500);
+      display: inline-block;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.75); }
+    }
+    .soon-h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(30px, 5vw, 44px);
+      color: var(--ink);
+      line-height: 1.15;
+      letter-spacing: -0.6px;
+      margin-bottom: 18px;
+    }
+    .soon-h1 em { font-style: italic; color: var(--indigo-700); }
+    .soon-sub {
+      font-size: 16px;
+      color: var(--ink-muted);
+      line-height: 1.65;
+      margin-bottom: 40px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .soon-form {
+      display: flex;
+      gap: 10px;
+      max-width: 420px;
+      margin: 0 auto 20px;
+    }
+    .soon-form input[type="email"] {
+      flex: 1;
+      height: 48px;
+      border: 1.5px solid var(--border-md);
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 0 16px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .soon-form input[type="email"]:focus { border-color: var(--indigo-500); }
+    .soon-form input[type="email"]::placeholder { color: var(--ink-faint); }
+    .soon-form button {
+      height: 48px;
+      padding: 0 22px;
+      background: var(--indigo-600);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .soon-form button:hover { background: var(--indigo-700); }
+    .soon-success {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--indigo-700);
+      font-weight: 500;
+      margin: 0 auto 20px;
+    }
+    .soon-note {
+      font-size: 12px;
+      color: var(--ink-faint);
+      margin-bottom: 56px;
+    }
+    .soon-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 auto 48px;
+      max-width: 320px;
+    }
+    .soon-other-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 24px;
+    }
+    .soon-other-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+      max-width: 480px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .soon-other-list li a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 500;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .soon-other-list li a:hover {
+      border-color: var(--indigo-300);
+      background: var(--indigo-50);
+    }
+    .soon-other-list .item-cat {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--indigo-500);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .soon-other-list .arrow {
+      color: var(--indigo-400);
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-left: 12px;
+    }
+    .soon-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--indigo-600);
+      text-decoration: none;
+    }
+    .soon-back:hover { color: var(--indigo-800); }
+    @media (max-width: 480px) {
+      .soon-form { flex-direction: column; }
+      .soon-form input[type="email"], .soon-form button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo-wrap">
+        <img src="src/img/numr-logo.png" alt="Numr logo" class="nav-logo-img">
+        <span class="nav-logo-text">Numr</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#market-reports">Market Reports</a></li>
+        <li><a href="index.html#value-tracker">Value Tracker</a></li>
+        <li><a href="tax-calculator.html">Tax Calculator</a></li>
+        <li><a href="blog.html" class="active">Blog</a></li>
+        <li><a href="mailto:contact@usenumr.com">Contact</a></li>
+      </ul>
+      <a href="/#waitlist" class="nav-cta">Get early access</a>
+    </div>
+  </nav>
+
+  <div class="soon-wrap">
+    <div class="soon-badge"><span></span> Coming soon</div>
+    <h1 class="soon-h1">This article is<br><em>on its way</em></h1>
+    <p class="soon-sub">We're still writing it. Subscribe below and we'll send it straight to you the moment it's published — no noise, just the article.</p>
+
+    <form class="soon-form" id="soonForm">
+      <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true">
+      <input type="email" placeholder="your@email.com" required>
+      <button type="submit">Notify me</button>
+    </form>
+    <div class="soon-success" id="soonSuccess">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round"/></svg>
+      Done — we'll send it when it's live.
+    </div>
+    <p class="soon-note">No spam. Unsubscribe anytime.</p>
+
+    <hr class="soon-divider">
+
+    <div class="soon-other-label">Read now</div>
+    <ul class="soon-other-list">
+      <li>
+        <a href="https://medium.com/@UseNumr/how-much-does-buying-property-in-nigeria-really-cost-you-09c814cb4a6a" target="_blank" rel="noopener" onclick="gtag('event','article_click',{event_category:'blog',event_label:'hidden_costs_from_soon_page'})">
+          <span>
+            <span class="item-cat">Transparency</span>
+            How Much Does Buying Property in Nigeria Really Cost You?
+          </span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="tax-calculator.html" onclick="gtag('event','tool_click',{event_category:'blog',event_label:'tax_calc_from_soon_page'})">
+          <span>
+            <span class="item-cat">Free Tool</span>
+            Nigeria Real Estate Tax Calculator — calculate your full transaction cost
+          </span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+    </ul>
+
+    <a href="blog.html" class="soon-back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M11.5 7H2.5M6.5 3L2.5 7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to all articles
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <a href="/" class="footer-logo">num<span>r</span></a>
+          <p class="footer-tagline">Nigeria's real estate intelligence platform. Built for local investors, developers, and the diaspora — focused on Lagos and Abuja.</p>
+        </div>
+        <div>
+          <div class="footer-col-title">Tools</div>
+          <ul class="footer-links">
+            <li><a href="tax-calculator.html">Tax Calculator</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links">
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="mailto:contact@usenumr.com">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Numr &mdash; Nigeria&rsquo;s Real Estate Intelligence Platform.</p>
+        <p>Not a licensed tax adviser. All tools for planning purposes only.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwo5bg86p9HlwqTNDowXeP2f9GHCmr6KF3uL_Xsju3O50vznSwnb4C3VBxFsDNXwIXZ/exec';
+    const PAGE_LOAD_TIME = Date.now();
+
+    function isBotEmail(email) {
+      const local = email.split('@')[0];
+      const segments = local.split('.');
+      const dots = segments.length - 1;
+      if (dots > 4) return true;
+      if (/\.\d+$/.test(local)) return true;
+      if (dots > 2) {
+        const avgSegLen = local.replace(/\./g, '').length / segments.length;
+        if (avgSegLen < 4) return true;
+      }
+      return false;
+    }
+
+    document.getElementById('soonForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const honeypot = this.querySelector('input[name="website"]');
+      if (honeypot && honeypot.value) return;
+      if (Date.now() - PAGE_LOAD_TIME < 3000) return;
+      const email = this.querySelector('input[type="email"]').value;
+      if (isBotEmail(email)) return;
+      if (this.dataset.submitted === 'true') return;
+      this.dataset.submitted = 'true';
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ email, source: 'blog_coming_soon', timestamp: new Date().toISOString() }),
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        gtag('event', 'generate_lead', { event_category: 'conversion', event_label: 'blog_soon_notify' });
+      } catch (err) {
+        console.error(err);
+      } finally {
+        this.style.display = 'none';
+        document.getElementById('soonSuccess').style.display = 'flex';
+      }
+    });
+  </script>
+</body>
+</html>
